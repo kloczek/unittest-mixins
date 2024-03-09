@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Licensed under the Apache License: http://www.apache.org/licenses/LICENSE-2.0
 # For details: https://github.com/nedbat/unittest-mixins/blob/master/NOTICE.txt
 
@@ -32,7 +31,7 @@ from unittest_mixins import (
 class ChangeDirTest(unittest.TestCase):
     """Test the change_dir decorator."""
     def setUp(self):
-        super(ChangeDirTest, self).setUp()
+        super().setUp()
         self.root = tempfile.mkdtemp(prefix="change_dir_test")
         self.addCleanup(shutil.rmtree, self.root)
         self.a_dir = os.path.join(self.root, "a_dir")
@@ -132,7 +131,7 @@ class EnvironmentAwareMixinTest(EnvironmentAwareMixin, unittest.TestCase):
     """Tests of test_helpers.EnvironmentAwareMixin."""
 
     def setUp(self):
-        super(EnvironmentAwareMixinTest, self).setUp()
+        super().setUp()
 
         # Find a pre-existing environment variable.
         # Not sure what environment variables are available in all of our
@@ -229,7 +228,7 @@ class DelayedAssertionMixinTest(DelayedAssertionMixin, unittest.TestCase):
             - w
             + z
             """))
-        with six.assertRaisesRegex(self, AssertionError, msg):
+        with self.assertRaisesRegex(AssertionError, msg):
             with self.delayed_assertions():
                 self.assertEqual("x", "y")
                 self.assertEqual("w", "z")
@@ -241,7 +240,7 @@ class DelayedAssertionMixinTest(DelayedAssertionMixin, unittest.TestCase):
             - w
             + z
             """))
-        with six.assertRaisesRegex(self, AssertionError, msg):
+        with self.assertRaisesRegex(AssertionError, msg):
             with self.delayed_assertions():
                 self.assertEqual("x", "x")
                 self.assertEqual("w", "z")

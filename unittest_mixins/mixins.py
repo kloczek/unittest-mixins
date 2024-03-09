@@ -21,7 +21,7 @@ except ImportError:
 import six
 
 
-class _Tee(object):
+class _Tee:
     """A file-like that writes to all the file-likes it has."""
 
     def __init__(self, *files):
@@ -101,7 +101,7 @@ def setup_with_context_manager(testcase, cm):
     return val
 
 
-class ModuleCleaner(object):
+class ModuleCleaner:
     """Remember the state of sys.modules, and provide a way to restore it."""
 
     def __init__(self):
@@ -122,7 +122,7 @@ class ModuleAwareMixin(unittest.TestCase):
     """A test case mixin that isolates changes to sys.modules."""
 
     def setUp(self):
-        super(ModuleAwareMixin, self).setUp()
+        super().setUp()
 
         self._module_cleaner = ModuleCleaner()
         self.addCleanup(self._module_cleaner.cleanup_modules)
@@ -135,7 +135,7 @@ class SysPathAwareMixin(unittest.TestCase):
     """A test case mixin that isolates changes to sys.path."""
 
     def setUp(self):
-        super(SysPathAwareMixin, self).setUp()
+        super().setUp()
         setup_with_context_manager(self, saved_sys_path())
 
 
@@ -143,7 +143,7 @@ class EnvironmentAwareMixin(unittest.TestCase):
     """A test case mixin that isolates changes to the environment."""
 
     def setUp(self):
-        super(EnvironmentAwareMixin, self).setUp()
+        super().setUp()
 
         # Record environment variables that we changed with set_environ.
         self._environ_undos = {}
@@ -202,7 +202,7 @@ class StdStreamCapturingMixin(unittest.TestCase):
     show_stderr = False
 
     def setUp(self):
-        super(StdStreamCapturingMixin, self).setUp()
+        super().setUp()
 
         # Capture stdout and stderr so we can examine them in tests.
         # nose keeps stdout from littering the screen, so we can safely _Tee
@@ -255,7 +255,7 @@ class DelayedAssertionMixin(unittest.TestCase):
 
     """
     def __init__(self, *args, **kwargs):
-        super(DelayedAssertionMixin, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         # This mixin only works with assert methods that call `self.fail`.  In
         # Python 2.7, `assertEqual` didn't, but we can do what Python 3 does,
         # and use `assertMultiLineEqual` for comparing strings.
@@ -277,7 +277,7 @@ class DelayedAssertionMixin(unittest.TestCase):
                 self.fail(self._delayed_assertions[0])
             else:
                 self.fail(
-                    "{0} failed assertions:\n{1}".format(
+                    "{} failed assertions:\n{}".format(
                         len(self._delayed_assertions),
                         "\n".join(self._delayed_assertions),
                     )
@@ -310,10 +310,7 @@ def make_file(filename, text="", bytes=b"", newline=None):
         text = textwrap.dedent(text)
         if newline:
             text = text.replace("\n", newline)
-        if six.PY3:
-            data = text.encode('utf8')
-        else:
-            data = text
+        data = text.encode('utf8')
 
     # Make sure the directories are available.
     dirs, _ = os.path.split(filename)
@@ -355,7 +352,7 @@ class TempDirMixin(SysPathAwareMixin, ModuleAwareMixin, unittest.TestCase):
     temp_dir_prefix = "test_"
 
     def setUp(self):
-        super(TempDirMixin, self).setUp()
+        super().setUp()
 
         if self.run_in_temp_dir:
             # Create a temporary directory.
@@ -385,7 +382,7 @@ class TempDirMixin(SysPathAwareMixin, ModuleAwareMixin, unittest.TestCase):
     def _make_temp_dir(self):
         """Make a temp directory that is cleaned up when the test is done."""
         slug = re.sub(r"[^\w]+", "_", self.id())
-        name = "{0}{1}_{2:08d}".format(
+        name = "{}{}_{:08d}".format(
             self.temp_dir_prefix,
             slug,
             random.randint(0, 99999999)
@@ -403,7 +400,7 @@ class TempDirMixin(SysPathAwareMixin, ModuleAwareMixin, unittest.TestCase):
     def skipTest(self, reason):
         """Skip this test, and give a reason."""
         self._class_behavior().skipped += 1
-        super(TempDirMixin, self).skipTest(reason)
+        super().skipTest(reason)
 
     def chdir(self, new_dir):
         """Change directory, and change back when the test is done."""
@@ -427,7 +424,7 @@ class TempDirMixin(SysPathAwareMixin, ModuleAwareMixin, unittest.TestCase):
     # then report at the end of the process on test classes that were set
     # wrong.
 
-    class _ClassBehavior(object):
+    class _ClassBehavior:
         """A value object to store per-class."""
         def __init__(self):
             self.klass = None
