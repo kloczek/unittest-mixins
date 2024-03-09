@@ -6,6 +6,7 @@
 import atexit
 import collections
 import contextlib
+import io
 import os
 import random
 import re
@@ -17,9 +18,6 @@ try:
     import unittest2 as unittest
 except ImportError:
     import unittest
-
-import six
-
 
 class _Tee:
     """A file-like that writes to all the file-likes it has."""
@@ -209,11 +207,11 @@ class StdStreamCapturingMixin(unittest.TestCase):
         # it, but it doesn't capture stderr, so we don't want to _Tee stderr to
         # the real stderr, since it will interfere with our nice field of dots.
         old_stdout = sys.stdout
-        self.captured_stdout = six.StringIO()
+        self.captured_stdout = io.StringIO()
         sys.stdout = _Tee(sys.stdout, self.captured_stdout)
 
         old_stderr = sys.stderr
-        self.captured_stderr = six.StringIO()
+        self.captured_stderr = io.StringIO()
         if self.show_stderr:
             sys.stderr = _Tee(sys.stderr, self.captured_stderr)
         else:

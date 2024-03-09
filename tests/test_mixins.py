@@ -4,6 +4,7 @@
 """Tests that our test infrastructure is really working!"""
 
 import contextlib
+import io
 import os
 import os.path
 import re
@@ -15,8 +16,6 @@ try:
     import unittest2 as unittest
 except ImportError:
     import unittest
-
-import six
 
 from unittest_mixins import (
     change_dir,
@@ -323,8 +322,8 @@ class StdStreamCapturingMixinTest(unittest.TestCase):
         old_stdout = sys.stdout
         old_stderr = sys.stderr
         self.addCleanup(self._cleanup_streams, old_stdout, old_stderr)
-        sys.stdout = my_stdout = six.StringIO()
-        sys.stderr = my_stderr = six.StringIO()
+        sys.stdout = my_stdout = io.StringIO()
+        sys.stderr = my_stderr = io.StringIO()
 
         results = run_tests_from_class(TheTestsToTest)
         assert_all_passed(results, tests_run=2)
